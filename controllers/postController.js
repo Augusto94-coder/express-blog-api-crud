@@ -19,15 +19,36 @@ function index(req, res) {
 // GET /posts/:id
 function show(req, res) {
   const id = Number(req.params.id);
-  const articolo = articoli.find(p => p.id === id);
-  if (!articolo) return res.status(404).json({ error: 'Post non trovato' });
-  res.json(articolo);
+  const post = articoli.find(p => p.id === id);
+  if (!post) return res.status(404).json({ error: 'Post non trovato' });
+  res.json(post);
 }
 
 // POST /posts 
 function store(req, res) {
-  res.send('Creazione nuovo post');
+  const newId = articoli[articoli.length - 1].id + 1;
+
+    // Creiamo un nuovo oggetto post
+    const newPost = {
+        id: newId,
+        title: req.body.title,
+        content: req.body.content,
+        image: req.body.image,
+        tags: req.body.tags 
+    };
+
+    // Aggiungiamo il nuovo post
+    articoli.push(newPost);
+
+    // Controllo in console (Milestone 2)
+    console.log("Nuovo post aggiunto:", newPost);
+    console.log("Lista aggiornata:", articoli);
+
+    // Restituiamo la risposta con status 201
+    res.status(201);
+    res.json(newPost);
 }
+
 
 // PUT /posts/:id 
 function update(req, res) {
