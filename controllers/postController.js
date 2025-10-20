@@ -2,7 +2,18 @@ const articoli = require('../data/articoli');
 
 // GET /posts
 function index(req, res) {
-  res.json(articoli);
+  let filteredPosts = articoli;
+
+    
+    if (req.query.tag) {
+        filteredPosts = articoli.filter(
+            post => post.tags.includes(req.query.tag)
+        );
+    }
+
+    
+    res.json(filteredPosts);
+
 }
 
 // GET /posts/:id
