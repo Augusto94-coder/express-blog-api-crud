@@ -52,12 +52,56 @@ function store(req, res) {
 
 // PUT /posts/:id 
 function update(req, res) {
-  res.send('Modifica integrale del post ' + req.params.id);
+    // Recuperiamo l'id dall'URL
+    const id = parseInt(req.params.id);
+
+    // Cerchiamo il post
+    const post = articoli.find(post => post.id === id);
+
+    // Controllo se non esiste
+    if (!post) {
+        res.status(404);
+        return res.json({
+            error: "Not Found",
+            message: "Post non trovato"
+        });
+    }
+
+    // Aggiorniamo completamente i campi
+    post.title = req.body.title;
+    post.content = req.body.content;
+    post.image = req.body.image;
+    post.tags = req.body.tags;
+
+    console.log("Post aggiornato:", post);
+    res.json(post);
 }
 
-// PATCH /posts/:id 
+// MODIFY (PATCH)
 function modify(req, res) {
-  res.send('Modifica parziale del post ' + req.params.id);
+    // Recuperiamo l'id
+    const id = parseInt(req.params.id);
+
+    // Cerchiamo il post
+    const post = articoli.find(post => post.id === id);
+
+    // Controllo se non esiste
+    if (!post) {
+        res.status(404);
+        return res.json({
+            error: "Not Found",
+            message: "Post non trovato"
+        });
+    }
+
+    // Aggiorniamo solo i campi presenti nella richiesta
+    req.body.title ? post.title = req.body.title : post.title = post.title;
+    req.body.content ? post.content = req.body.content : post.content = post.content;
+    req.body.image ? post.image = req.body.image : post.image = post.image;
+    req.body.tags ? post.tags = req.body.tags : post.tags = post.tags;
+
+    console.log("Post modificato (PATCH):", post);
+    res.json(post);
 }
 
 // DELETE /posts/:id —
