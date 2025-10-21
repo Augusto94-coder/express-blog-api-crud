@@ -2,31 +2,32 @@ const articoli = require('../data/articoli');
 
 // GET /posts
 function index(req, res) {
-  let filteredPosts = articoli;
+    paperino.get();
+    let filteredPosts = articoli;
 
-    
+
     if (req.query.tag) {
         filteredPosts = articoli.filter(
             post => post.tags.includes(req.query.tag)
         );
     }
 
-    
+
     res.json(filteredPosts);
 
 }
 
 // GET /posts/:id
 function show(req, res) {
-  const id = Number(req.params.id);
-  const post = articoli.find(p => p.id === id);
-  if (!post) return res.status(404).json({ error: 'Post non trovato' });
-  res.json(post);
+    const id = Number(req.params.id);
+    const post = articoli.find(p => p.id === id);
+    if (!post) return res.status(404).json({ error: 'Post non trovato' });
+    res.json(post);
 }
 
 // POST /posts 
 function store(req, res) {
-  const newId = articoli[articoli.length - 1].id + 1;
+    const newId = articoli[articoli.length - 1].id + 1;
 
     // Creiamo un nuovo oggetto post
     const newPost = {
@@ -34,7 +35,7 @@ function store(req, res) {
         title: req.body.title,
         content: req.body.content,
         image: req.body.image,
-        tags: req.body.tags 
+        tags: req.body.tags
     };
 
     // Aggiungiamo il nuovo post
@@ -106,15 +107,15 @@ function modify(req, res) {
 
 // DELETE /posts/:id —
 function destroy(req, res) {
-  const id = Number(req.params.id);
-  const idx = articoli.findIndex(a => a.id === id);
-  if (idx === -1) return res.status(404).json({ error: 'Post non trovato' });
+    const id = Number(req.params.id);
+    const idx = articoli.findIndex(a => a.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Post non trovato' });
 
-  articoli.splice(idx, 1);
-  console.log('Lista post aggiornata:', articoli);
-  return res.status(204).send(); // nessun contenuto
+    articoli.splice(idx, 1);
+    console.log('Lista post aggiornata:', articoli);
+    return res.status(204).send(); // nessun contenuto
 
-  
+
 }
 
 module.exports = { index, show, store, update, modify, destroy };
